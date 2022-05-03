@@ -28,6 +28,7 @@ int wait_test(struct mproc *rmp, struct mproc *child);
 /* getset.c */
 int do_get(void);
 int do_set(void);
+int do_getlcapid(void); // TODOXD
 
 /* main.c */
 int main(void);

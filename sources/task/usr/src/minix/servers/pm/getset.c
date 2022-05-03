@@ -187,3 +187,89 @@ int do_set()
   /* Do not reply until VFS has processed the request */
   return(SUSPEND);
 }
+
+/*===========================================================================*
+ *				do_getlcapid					     *
+ *===========================================================================*/
+int do_getlcapid() // TODOXD
+{
+    pid_t pid_1 = m_in.m1_i1;
+    pid_t pid_2 = m_in.m1_i2;
+    struct mproc *rmp_1 = NULL;
+    struct mproc *rmp_2 = NULL;
+
+    for (size_t i = 0; i < NR_PROCS; i++)
+    {
+        if (mproc[i].mp_pid == pid_1)
+        {
+            rmp_1 = &mproc[i];
+            break;
+        }
+    }
+
+    for (size_t i = 0; i < NR_PROCS; i++)
+    {
+        if (mproc[i].mp_pid == pid_2)
+        {
+            rmp_2 = &mproc[i];
+            break;
+        }
+    }
+
+//    TODO odkomentować
+    if (rmp_1 == NULL || rmp_2 == NULL)
+    {
+        printf("if 1\n");
+        return -1;
+    }
+
+    printf("rmp_1 pid: %d vs %d, rmp_2 pid: %d vs %d\n", rmp_1->mp_pid, pid_1, rmp_2->mp_pid, pid_2);
+
+    struct mproc *parenthood_1[NR_PROCS];
+    struct mproc *parenthood_2[NR_PROCS];
+
+    int last_1 = 0;
+    parenthood_1[0] = rmp_1;
+    while (&mproc[parenthood_1[last_1]->mp_parent] != parenthood_1[last_1])
+    {
+        printf("i: %d, proc pid: %d\n", last_1, parenthood_1[last_1]->mp_pid);
+        parenthood_1[last_1 + 1] = &mproc[parenthood_1[last_1]->mp_parent];
+        last_1++;
+    }
+
+    int last_2 = 0;
+    parenthood_2[0] = rmp_2;
+    while (&mproc[parenthood_2[last_2]->mp_parent] != parenthood_2[last_2])
+    {
+        printf("i: %d, proc pid: %d\n", last_2, parenthood_2[last_2]->mp_pid);
+        parenthood_2[last_2 + 1] = &mproc[parenthood_2[last_2]->mp_parent];
+        last_2++;
+    }
+
+//    TODO odkomentować xd
+    if (parenthood_1[last_1] != parenthood_2[last_2])
+    {
+        printf("if 2\n");
+        return -1;
+    }
+
+    while (parenthood_1[last_1] == parenthood_2[last_2] && last_1 > 0 && last_2 > 0)
+    {
+        last_1--;
+        last_2--;
+    }
+
+    if (parenthood_1[last_1] != parenthood_2[last_2])
+    {
+        return parenthood_1[last_1 + 1]->mp_pid;
+    }
+    else
+    {
+        return parenthood_1[last_1]->mp_pid;
+    }
+//    printf("pid: %d, parent's pid: %d\n", mproc[who_p].mp_pid, mproc[mp->mp_parent].mp_pid);
+//    register struct mproc *rmp = mp;
+//    mp->mp_reply
+//    printf("message: %d, %d\n", m_in.m1_i1, m_in.m1_i2);
+    return 2137;
+}

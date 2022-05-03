@@ -143,6 +143,7 @@ int	 tcsetpgrp(int, pid_t);
 __aconst char *ttyname(int);
 int	 unlink(const char *);
 ssize_t	 write(int, const void *, size_t);
+pid_t   getlcapid(pid_t, pid_t); // TODOXD
 
 
 /*

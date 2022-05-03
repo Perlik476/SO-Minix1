@@ -24,15 +24,15 @@ done
 
 ssh -p "${ssh_port}" root@localhost << EOF
 cd /usr/src
-make includes
+#make includes
 cd /usr/src/minix/fs/procfs
-make && make install
+#make && make install
 cd /usr/src/minix/servers/pm
 make && make install
 cd /usr/src/minix/drivers/storage/ramdisk
-make && make install
+#make && make install
 cd /usr/src/minix/drivers/storage/memory
-make && make install
+#make && make install
 cd /usr/src/lib/libc
 make && make install
 cd /usr/src/releasetools
