@@ -217,10 +217,20 @@ int do_getlcapid() // TODOXD
     }
 
 //    TODO odkomentować
-    if (rmp_1 == NULL || rmp_2 == NULL || !(rmp_1->mp_flags & IN_USE) || !(rmp_2->mp_flags & IN_USE))
+    if (rmp_1 == NULL || rmp_2 == NULL)
     {
-        mp->mp_reply
-//        printf("if 1\n");
+//        mp->mp_reply
+        printf("pid not found in mproc\n");
+        return -1;
+    }
+    if (!(rmp_1->mp_flags & IN_USE) || !(rmp_2->mp_flags & IN_USE))
+    {
+        printf("process not in use\n");
+        return -1;
+    }
+    if (rmp_1 == &(mproc[rmp_1->mp_parent]) || rmp_2 == &(mproc[rmp_2->mp_procgrp]))
+    {
+        printf("root has no parent\n");
         return -1;
     }
 
@@ -250,7 +260,7 @@ int do_getlcapid() // TODOXD
 //    TODO odkomentować xd
     if (parenthood_1[last_1] != parenthood_2[last_2])
     {
-        printf("if 2\n");
+        printf("different trees\n");
         return -1;
     }
 

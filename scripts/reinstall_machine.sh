@@ -22,6 +22,9 @@ then
 fi
 done
 
+current_time=$(date "+%C%y%m%d%H%M.%S")
+ssh root@localhost -p "${ssh_port}" "date ${current_time}"
+
 ssh -p "${ssh_port}" root@localhost << EOF
 cd /usr/src
 #make includes
