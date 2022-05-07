@@ -7,5 +7,7 @@ int main(){
     printf("getlcapid(%d, %d): %d\n", getpid(), getpid(), getlcapid(getpid(), getpid()));
     printf("getlcapid(%d, %d): %d\n", getppid(), getppid(), getlcapid(getppid(), getppid()));
     printf("getlcapid(2137, 476): %d\n", getlcapid(2137, 476));
+    printf("getlcapid(-1, -1): %d\n", getlcapid(-1, -1));
+    printf("getlcapid(1, 1): %d\n", getlcapid(1, 1));
     return 0;
 }

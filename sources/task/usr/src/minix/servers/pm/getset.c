@@ -217,13 +217,14 @@ int do_getlcapid() // TODOXD
     }
 
 //    TODO odkomentować
-    if (rmp_1 == NULL || rmp_2 == NULL)
+    if (rmp_1 == NULL || rmp_2 == NULL || !(rmp_1->mp_flags & IN_USE) || !(rmp_2->mp_flags & IN_USE))
     {
-        printf("if 1\n");
+        mp->mp_reply
+//        printf("if 1\n");
         return -1;
     }
 
-    printf("rmp_1 pid: %d vs %d, rmp_2 pid: %d vs %d\n", rmp_1->mp_pid, pid_1, rmp_2->mp_pid, pid_2);
+//    printf("rmp_1 pid: %d vs %d, rmp_2 pid: %d vs %d\n", rmp_1->mp_pid, pid_1, rmp_2->mp_pid, pid_2);
 
     struct mproc *parenthood_1[NR_PROCS];
     struct mproc *parenthood_2[NR_PROCS];
@@ -232,7 +233,7 @@ int do_getlcapid() // TODOXD
     parenthood_1[0] = rmp_1;
     while (&mproc[parenthood_1[last_1]->mp_parent] != parenthood_1[last_1])
     {
-        printf("i: %d, proc pid: %d\n", last_1, parenthood_1[last_1]->mp_pid);
+//        printf("i: %d, proc pid: %d\n", last_1, parenthood_1[last_1]->mp_pid);
         parenthood_1[last_1 + 1] = &mproc[parenthood_1[last_1]->mp_parent];
         last_1++;
     }
@@ -241,7 +242,7 @@ int do_getlcapid() // TODOXD
     parenthood_2[0] = rmp_2;
     while (&mproc[parenthood_2[last_2]->mp_parent] != parenthood_2[last_2])
     {
-        printf("i: %d, proc pid: %d\n", last_2, parenthood_2[last_2]->mp_pid);
+//        printf("i: %d, proc pid: %d\n", last_2, parenthood_2[last_2]->mp_pid);
         parenthood_2[last_2 + 1] = &mproc[parenthood_2[last_2]->mp_parent];
         last_2++;
     }
@@ -259,14 +260,16 @@ int do_getlcapid() // TODOXD
         last_2--;
     }
 
-    if (parenthood_1[last_1] != parenthood_2[last_2])
-    {
-        return parenthood_1[last_1 + 1]->mp_pid;
-    }
-    else
-    {
-        return parenthood_1[last_1]->mp_pid;
-    }
+    return parenthood_1[last_1 + 1]->mp_pid;
+
+//    if (parenthood_1[last_1] != parenthood_2[last_2])
+//    {
+//        return parenthood_1[last_1 + 1]->mp_pid;
+//    }
+//    else
+//    {
+//        return parenthood_1[last_1]->mp_pid;
+//    }
 //    printf("pid: %d, parent's pid: %d\n", mproc[who_p].mp_pid, mproc[mp->mp_parent].mp_pid);
 //    register struct mproc *rmp = mp;
 //    mp->mp_reply
